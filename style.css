@@ -190,3 +190,57 @@ footer {
 a {
   color: #CCD0CF;
 }
+
+/* ================= NAVIGATION ================= */
+.page-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.page-nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.page-nav a {
+  color: #CCD0CF; /* light text color */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Add underline effect */
+.page-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #9BA8AB; /* gradient accent color */
+  transition: width 0.3s ease;
+}
+
+.page-nav a:hover::after {
+  width: 100%;
+}
+
+.page-nav a:hover {
+  color: #ffffff;
+}
+
+.page-nav a.active {
+  color: #ffffff;
+}
+
+.page-nav a.active::after {
+  width: 100%;
+}
