@@ -1,23 +1,12 @@
-// ================= NAVIGATION: Resume <-> Portfolio =================
-// If you have nav links, you can still use them, but they won't hide/show pages anymore
+// ================= SMOOTH SCROLL NAVIGATION =================
 const navLinks = document.querySelectorAll(".nav-link");
-const pages = document.querySelectorAll(".page");
 
 navLinks.forEach(link => {
-  link.addEventListener("click", () => {
-    const targetPage = link.dataset.target;
-
-    // Update nav active class
-    navLinks.forEach(l => l.classList.remove("active"));
-    link.classList.add("active");
-
-    // Do NOT hide other pages anymore
-    pages.forEach(page => {
-      page.style.display = "block"; // always visible
-      page.classList.remove("active"); // remove CSS conflicts if needed
-    });
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute("href").substring(1);
+    const targetDiv = document.getElementById(targetId);
+    targetDiv.scrollIntoView({ behavior: "smooth" });
   });
 });
 
@@ -25,7 +14,7 @@ navLinks.forEach(link => {
 const portfolioImages = Array.from(document.querySelectorAll(".portfolio-grid img"));
 let currentIndex = 0;
 
-// Create overlay container
+// Overlay container
 const overlay = document.createElement("div");
 overlay.id = "portfolioOverlay";
 overlay.style.cssText = `
@@ -42,14 +31,12 @@ overlay.style.cssText = `
 `;
 document.body.appendChild(overlay);
 
-// Create image element
 const overlayImg = document.createElement("img");
 overlayImg.style.maxWidth = "90%";
 overlayImg.style.maxHeight = "90%";
 overlayImg.style.borderRadius = "6px";
 overlay.appendChild(overlayImg);
 
-// Create left/right arrows
 const leftArrow = document.createElement("div");
 const rightArrow = document.createElement("div");
 [leftArrow, rightArrow].forEach(arrow => {
@@ -67,11 +54,10 @@ const rightArrow = document.createElement("div");
   overlay.appendChild(arrow);
 });
 leftArrow.style.left = "0";
-leftArrow.innerHTML = "&#10094;"; // left arrow
+leftArrow.innerHTML = "&#10094;";
 rightArrow.style.right = "0";
-rightArrow.innerHTML = "&#10095;"; // right arrow
+rightArrow.innerHTML = "&#10095;";
 
-// Close overlay on background click
 overlay.addEventListener("click", e => {
   if (e.target === overlay) closeOverlay();
 });
@@ -85,9 +71,7 @@ function openOverlay(index) {
 
 function closeOverlay() {
   overlay.style.opacity = "0";
-  setTimeout(() => {
-    overlay.style.visibility = "hidden";
-  }, 300);
+  setTimeout(() => { overlay.style.visibility = "hidden"; }, 300);
 }
 
 function showNext() {
@@ -100,33 +84,17 @@ function showPrev() {
   overlayImg.src = portfolioImages[currentIndex].src;
 }
 
-// Arrow click events
-leftArrow.addEventListener("click", e => {
-  e.stopPropagation();
-  showPrev();
-});
-rightArrow.addEventListener("click", e => {
-  e.stopPropagation();
-  showNext();
-});
+leftArrow.addEventListener("click", e => { e.stopPropagation(); showPrev(); });
+rightArrow.addEventListener("click", e => { e.stopPropagation(); showNext(); });
 
-// Portfolio image click events
 portfolioImages.forEach((img, index) => {
   img.addEventListener("click", () => openOverlay(index));
 });
 
-// Keyboard navigation
 document.addEventListener("keydown", e => {
   if (overlay.style.visibility === "visible") {
     if (e.key === "ArrowRight") showNext();
     if (e.key === "ArrowLeft") showPrev();
     if (e.key === "Escape") closeOverlay();
   }
-});
-
-// ================= INITIAL STATE =================
-// Show both Resume and Portfolio by default
-pages.forEach(page => {
-  page.style.display = "block"; // always visible
-  page.classList.remove("active"); // remove CSS conflicts if needed
 });
